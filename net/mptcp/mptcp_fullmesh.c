@@ -1166,7 +1166,9 @@ static void full_mesh_new_session(const struct sock *meta_sk)
 	bool meta_v4 = meta_sk->sk_family == AF_INET;
 
 	/* Init local variables necessary for the rest */
-	if (meta_sk->sk_family == AF_INET || mptcp_v6_is_v4_mapped(meta_sk)) {
+#if IS_ENABLED(CONFIG_IPV6)
+	if (meta_v4 || mptcp_v6_is_v4_mapped(meta_sk)) {
+#endif
 		saddr.ip = inet_sk(meta_sk)->inet_saddr;
 		daddr.ip = inet_sk(meta_sk)->inet_daddr;
 		family = AF_INET;
@@ -1175,8 +1177,8 @@ static void full_mesh_new_session(const struct sock *meta_sk)
 		saddr.in6 = inet6_sk(meta_sk)->saddr;
 		daddr.in6 = meta_sk->sk_v6_daddr;
 		family = AF_INET6;
-#endif
 	}
+#endif
 
 	rcu_read_lock();
 	mptcp_local = rcu_dereference(fm_ns->local);
