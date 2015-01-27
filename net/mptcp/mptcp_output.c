@@ -1168,8 +1168,6 @@ void mptcp_options_write(__be32 *ptr, struct tcp_sock *tp,
 		mpprio->rsv = 0;
 		mpprio->b = tp->mptcp->low_prio;
 		mpprio->addr_id = TCPOPT_NOP;
-
-		ptr += MPTCP_SUB_LEN_PRIO_ALIGN >> 2;
 	}
 }
 
